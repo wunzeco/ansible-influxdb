@@ -15,4 +15,4 @@
   apt: name=influxdb state=present
 
 - name: Start influxdb
-  service: name=influxdb state=started
+  service: name=influxdb enabled=yes state=started
