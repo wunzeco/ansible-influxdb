@@ -1,0 +1,18 @@
+---
+
+- name: Download and install influxdb apt public signing key
+  apt_key:
+    url:   "{{ influxdb_signing_key_url }}"
+    state: present
+
+- name: Add influxdb apt repository definition to apt sources list
+  apt_repository: 
+    repo:         "{{ influxdb_apt_repo }}"
+    update_cache: yes
+    state:        present
+
+- name: Install influxdb
+  apt: name=influxdb state=present
+
+- name: Start influxdb
+  service: name=influxdb state=started
