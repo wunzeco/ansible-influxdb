@@ -2,13 +2,15 @@
 influxdb_user:  influxdb
 influxdb_group: "{{ influxdb_user }}"
 
+#############
 ## Package
 influxdb_version:                 # e.g. 0.13.0
 influxdb_signing_key_url: "https://repos.influxdata.com/influxdb.key" 
 influxdb_apt_repo: "deb https://repos.influxdata.com/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable" 
 influxdb_yum_repo_baseurl: 'https://repos.influxdata.com/centos/\$releasever/\$basearch/stable'
 
-## Config
+################
+## Configuration
 influxdb_opts: []
 influxdb_log_dir:   /var/log/influxdb
 influxdb_conf_dir:  /etc/influxdb
