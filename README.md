@@ -21,6 +21,4 @@ Ansible role to install and configure InfluxDB.
 none
 
 ## ToDo
-- template influxdb.conf
-- template /etc/default/influxdb
-- template or copy /etc/logrotate.d/influxdb
+- complete templating of influxdb.conf
