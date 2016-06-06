@@ -1,0 +1,8 @@
+{{ influxdb_log_dir }}/influxd.log {
+    daily
+    rotate 7
+    missingok
+    dateext
+    copytruncate
+    compress
+}

@@ -1,0 +1,15 @@
+# Daemon options
+INFLUXD_OPTS="{{ influxdb_opts|join(' ') }}"
+
+# User and group
+USER={{ influxdb_user }}
+GROUP={{ influxdb_group }}
+
+# Configuration file
+CONFIG={{ influxdb_conf_dir }}/influxdb.conf
+
+# PID file for the daemon
+PIDFILE={{ influxdb_pid_dir }}/influxd.pid
+
+# Max open files
+OPEN_FILE_LIMIT={{ influxdb_open_file_limit }}
