@@ -9,11 +9,148 @@ influxdb_signing_key_url: "https://repos.influxdata.com/influxdb.key"
 influxdb_apt_repo: "deb https://repos.influxdata.com/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable" 
 influxdb_yum_repo_baseurl: 'https://repos.influxdata.com/centos/\$releasever/\$basearch/stable'
 
-################
+#################
 ## Configuration
+##
+## For further information on configuration settings, see
+##    https://github.com/influxdata/influxdb/blob/master/etc/config.sample.toml
+
 influxdb_opts: []
-influxdb_log_dir:   /var/log/influxdb
-influxdb_conf_dir:  /etc/influxdb
-influxdb_pid_dir: /var/run/influxdb
+influxdb_log_dir:  /var/log/influxdb
+influxdb_conf_dir: /etc/influxdb
+influxdb_pid_dir:  /var/run/influxdb
+influxdb_home_dir: /var/lib/influxdb
 influxdb_open_file_limit: 65536
 
+influxdb_reporting_disabled: false
+# influxdb_hostname: "localhost"
+
+### [meta]
+influxdb_meta_dir: "{{ influxdb_home_dir }}/meta"
+influxdb_meta_retention_autocreate: true
+influxdb_meta_logging_enabled: true
+influxdb_meta_pprof_enabled: false
+influxdb_meta_lease_duration: "1m0s"
+
+### [data]
+influxdb_data_enabled: true
+influxdb_data_dir: "{{ influxdb_home_dir }}/data"
+influxdb_data_wal_dir: "{{ influxdb_home_dir }}/wal"
+influxdb_data_wal_logging_enabled: true
+influxdb_data_data_logging_enabled: true
+# influxdb_data_query_log_enabled: true
+# influxdb_data_cache_max_memory_size: 524288000
+# influxdb_data_cache_snapshot_memory_size: 26214400
+# influxdb_data_cache_snapshot_write_cold_duration: "1h"
+# influxdb_data_compact_min_file_count: 3
+# influxdb_data_compact_full_write_cold_duration: "24h"
+# influxdb_data_max_points_per_block: 1000
+
+### [cluster]
+influxdb_cluster_shard_writer_timeout: "5s" # The time within which a remote shard must respond to a write request.
+influxdb_cluster_write_timeout: "10s" # The time within which a write request must complete on the cluster.
+influxdb_cluster_max_concurrent_queries: 0 # The maximum number of concurrent queries that can run. 0 to disable.
+influxdb_cluster_query_timeout: "0s" # The time within a query must complete before being killed automatically. 0s to disable.
+influxdb_cluster_max_select_point: 0 # The maximum number of points to scan in a query. 0 to disable.
+influxdb_cluster_max_select_series: 0 # The maximum number of series to select in a query. 0 to disable.
+influxdb_cluster_max_select_buckets: 0 # The maximum number of buckets to select in an aggregate query. 0 to disable.
+
+### [retention]
+influxdb_retention_enabled: true
+influxdb_retention_check_interval: "30m"
+
+### [shard-precreation]
+influxdb_shard_precreation_enabled: true
+influxdb_shard_precreation_check_interval: "10m"
+influxdb_shard_precreation_advance_period: "30m"
+
+### [monitor]
+influxdb_monitor_store_enabled: true # Whether to record statistics internally.
+influxdb_monitor_store_database: "_internal" # The destination database for recorded statistics
+influxdb_monitor_store_interval: "10s" # The interval at which to record statistics
+
+### [admin]
+influxdb_admin_enabled: true
+influxdb_admin_bind_address: ":8083"
+influxdb_admin_https_enabled: false
+influxdb_admin_https_certificate: "/etc/ssl/influxdb.pem"
+
+### [http]
+influxdb_http_enabled: true
+influxdb_http_bind_address: ":8086"
+influxdb_http_auth_enabled: false
+influxdb_http_log_enabled: true
+influxdb_http_write_tracing: false
+influxdb_http_pprof_enabled: false
+influxdb_http_https_enabled: false
+influxdb_http_https_certificate: "/etc/ssl/influxdb.pem"
+influxdb_http_max_row_limit: 10000
+
+### [continuous_queries]
+influxdb_continuous_queries_log_enabled: true
+influxdb_continuous_queries_enabled: true
+# influxdb_continuous_queries_run_interval: "1s" # interval for how often continuous queries will be checked if they need to run
+
+### [[graphite]]
+### Controls one or many listeners for Graphite data.
+###
+influxdb_graphite: 
+  - enabled: false
+    # database: "graphite"
+    # bind-address: ":2003"
+    # protocol: "tcp"
+    # consistency-level: "one"
+    # batch-size: 5000 # will flush if this many points get buffered
+    # batch-pending: 10 # number of batches that may be pending in memory
+    # batch-timeout: "1s" # will flush at least this often even if we haven't hit buffer limit
+    # udp-read-buffer: 0 # UDP Read buffer size, 0 means OS default. UDP listener will fail if set above OS max.
+    # separator: "."
+    # tags: ["region=us-east", "zone=1c"]
+    # templates: [
+    #   "*.app env.service.resource.measurement",
+    #   # Default template
+    #   "server.*",
+    # ]
+
+### [collectd]
+### Controls one or many listeners for collectd data.
+###
+influxdb_collectd:
+  - enabled: false
+    # bind-address: ""
+    # database: ""
+    # typesdb: ""
+    # batch-size: 1000 # will flush if this many points get buffered
+    # batch-pending: 5 # number of batches that may be pending in memory
+    # batch-timeout: "1s" # will flush at least this often even if we haven't hit buffer limit
+    # read-buffer: 0 # UDP Read buffer size, 0 means OS default. UDP listener will fail if set above OS max.
+
+### [opentsdb]
+### Controls one or many listeners for OpenTSDB data.
+###
+influxdb_opentsdb:
+  - enabled: false
+    # bind-address: ":4242"
+    # database: "opentsdb"
+    # retention-policy: ""
+    # consistency-level: "one"
+    # tls-enabled: false
+    # certificate: ""
+    # log-point-errors: true # Log an error for every malformed point.
+    # batch-size: 1000 # will flush if this many points get buffered
+    # batch-pending: 5 # number of batches that may be pending in memory
+    # batch-timeout: "1s" # will flush at least this often even if we haven't hit buffer limit
+
+### [[udp]]
+### Controls the listeners for InfluxDB line protocol data via UDP.
+###
+influxdb_udp:
+  - enabled: false
+    # bind-address: ""
+    # database: "udp"
+    # retention-policy: ""
+    # batch-size: 1000 # will flush if this many points get buffered
+    # batch-pending: 5 # number of batches that may be pending in memory
+    # batch-timeout: "1s" # will flush at least this often even if we haven't hit buffer limit
+    # read-buffer: 0 # UDP Read buffer size, 0 means OS default. UDP listener will fail if set above OS max.
+    # udp-payload-size: 65536

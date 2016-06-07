@@ -10,6 +10,9 @@ end
   /etc/default/influxdb
 ).each do |f|
   describe file(f) do
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_mode 644 }
   end
 end
 

@@ -19,6 +19,3 @@ Ansible role to install and configure InfluxDB.
 ## Dependencies
 
 none
-
-## ToDo
-- complete templating of influxdb.conf
