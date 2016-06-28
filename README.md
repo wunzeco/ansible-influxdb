@@ -16,6 +16,15 @@ Ansible role to install and configure InfluxDB.
 ```
 
 
+## Testing
+
+To run this role's integration tests
+
+```
+kitchen test
+```
+
+
 ## Dependencies
 
 none
