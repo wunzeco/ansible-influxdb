@@ -3,6 +3,22 @@
 - name: Install influxdb
   include: "install-{{ ansible_os_family|lower }}.yml"
 
+- name: Get influxdb user info
+  user: name=influxdb
+  register: info
+
+- name: Stop influxdb before migrating home dir
+  service: name=influxdb state=stopped
+  when: influxdb_home_dir != info.home
+
+- name: Migrate influxdb home dir to desired location
+  user:
+    name:  "{{ influxdb_user }}"
+    home:  "{{ influxdb_home_dir }}"
+    move_home: yes
+  when: influxdb_home_dir != info.home 
+  notify: Restart influxdb
+
 - name: Create influxdb config file
   template:
     src:   influxdb.conf.j2
