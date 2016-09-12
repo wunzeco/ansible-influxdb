@@ -1,10 +1,8 @@
 ### Welcome to the InfluxDB configuration file.
 
-# Once every 24 hours InfluxDB will report anonymous data to m.influxdb.com
-# The data includes raft id (random 8 bytes), os, arch, version, and metadata.
-# We don't track ip addresses of servers reporting. This is only used
-# to track the number of instances running and the versions, which
-# is very helpful for us.
+# Once every 24 hours InfluxDB will report usage data to usage.influxdata.com
+# The data includes a random ID, os, arch, version, the number of series and other
+# usage data. No data from user databases is ever transmitted.
 # Change this option to true to disable reporting.
 reporting-disabled = {{ influxdb_reporting_disabled|default(false)|bool|lower }}
 
@@ -54,7 +52,10 @@ hostname = "{{ influxdb_hostname }}"
   # These are the WAL settings for the storage engine >= 0.9.3
   wal-dir = "{{ influxdb_data_wal_dir }}"
   wal-logging-enabled = {{ influxdb_data_wal_logging_enabled|default(true)|bool|lower }}
-  data-logging-enabled = {{ influxdb_data_data_logging_enabled|default(true)|bool|lower }}
+
+  # Trace logging provides more verbose output around the tsm engine. Turning
+  # this on can provide more useful output for debugging tsm engine issues.
+  trace-logging-enabled = {{ influxdb_data_trace_logging_enabled|default(false)|bool|lower }}
 
   # Whether queries should be logged before execution. Very useful for troubleshooting, but will
   # log any sensitive data contained within a query.
@@ -108,20 +109,19 @@ hostname = "{{ influxdb_hostname }}"
 {% endif %}
 
 ###
-### [cluster]
+### [coordinator]
 ###
-### Controls non-Raft cluster behavior, which generally includes how data is
-### shared across shards.
+### Controls the clustering service configuration.
 ###
 
-[cluster]
-  shard-writer-timeout = "{{ influxdb_cluster_shard_writer_timeout }}" # The time within which a remote shard must respond to a write request.
-  write-timeout = "{{ influxdb_cluster_write_timeout }}" # The time within which a write request must complete on the cluster.
-  max-concurrent-queries = {{ influxdb_cluster_max_concurrent_queries }} # The maximum number of concurrent queries that can run. 0 to disable.
-  query-timeout = "{{ influxdb_cluster_query_timeout }}" # The time within a query must complete before being killed automatically. 0s to disable.
-  max-select-point = {{ influxdb_cluster_max_select_point }} # The maximum number of points to scan in a query. 0 to disable.
-  max-select-series = {{ influxdb_cluster_max_select_series }} # The maximum number of series to select in a query. 0 to disable.
-  max-select-buckets = {{ influxdb_cluster_max_select_buckets }} # The maximum number of buckets to select in an aggregate query. 0 to disable.
+[coordinator]
+  write-timeout = "{{ influxdb_coordinator_write_timeout }}"
+  max-concurrent-queries = {{ influxdb_coordinator_max_concurrent_queries }}
+  query-timeout = "{{ influxdb_coordinator_query_timeout }}"
+  log-queries-after = "{{ influxdb_coordinator_log_queries_after }}"
+  max-select-point = {{ influxdb_coordinator_max_select_point }}
+  max-select-series = {{ influxdb_coordinator_max_select_series }}
+  max-select-buckets = {{ influxdb_coordinator_max_select_buckets }}
 
 ###
 ### [retention]
@@ -189,7 +189,24 @@ hostname = "{{ influxdb_hostname }}"
   pprof-enabled = {{ influxdb_http_pprof_enabled|default(false)|bool|lower }}
   https-enabled = {{ influxdb_http_https_enabled|default(false)|bool|lower }}
   https-certificate = "{{ influxdb_http_https_certificate }}"
+  ### Use a separate private key location.
+  # https-private-key = ""
+{% if influxdb_http_https_private_key|default(false) != '' %}
+  https-private-key = "{{ influxdb_http_https_private_key }}"
+{% endif %}
   max-row-limit = 10000
+  realm = "{{ influxdb_http_realm|default('InfluxDB') }}"
+
+###
+### [subsciber]
+###
+### Controls the subscriptions, which can be used to fork a copy of all data
+### received by the InfluxDB host.
+###
+
+[subsciber]
+  enabled = {{ influxdb_subscriber_enabled|default(true)|bool|lower }}
+  http-timeout = "{{ influxdb_subscriber_http_timeout|default('30s') }}"
 
 ###
 ### [[graphite]]

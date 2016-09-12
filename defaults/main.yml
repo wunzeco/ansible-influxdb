@@ -37,7 +37,7 @@ influxdb_data_enabled: true
 influxdb_data_dir: "{{ influxdb_home_dir }}/data"
 influxdb_data_wal_dir: "{{ influxdb_home_dir }}/wal"
 influxdb_data_wal_logging_enabled: true
-influxdb_data_data_logging_enabled: true
+influxdb_data_trace_logging_enabled: false
 # influxdb_data_query_log_enabled: true
 # influxdb_data_cache_max_memory_size: 524288000
 # influxdb_data_cache_snapshot_memory_size: 26214400
@@ -46,14 +46,14 @@ influxdb_data_data_logging_enabled: true
 # influxdb_data_compact_full_write_cold_duration: "24h"
 # influxdb_data_max_points_per_block: 1000
 
-### [cluster]
-influxdb_cluster_shard_writer_timeout: "5s" # The time within which a remote shard must respond to a write request.
-influxdb_cluster_write_timeout: "10s" # The time within which a write request must complete on the cluster.
-influxdb_cluster_max_concurrent_queries: 0 # The maximum number of concurrent queries that can run. 0 to disable.
-influxdb_cluster_query_timeout: "0s" # The time within a query must complete before being killed automatically. 0s to disable.
-influxdb_cluster_max_select_point: 0 # The maximum number of points to scan in a query. 0 to disable.
-influxdb_cluster_max_select_series: 0 # The maximum number of series to select in a query. 0 to disable.
-influxdb_cluster_max_select_buckets: 0 # The maximum number of buckets to select in an aggregate query. 0 to disable.
+### [coordinator]
+influxdb_coordinator_write_timeout: "10s"
+influxdb_coordinator_max_concurrent_queries: 0
+influxdb_coordinator_query_timeout: "0"
+influxdb_coordinator_log_queries_after: "0"
+influxdb_coordinator_max_select_point: 0
+influxdb_coordinator_max_select_series: 0
+influxdb_coordinator_max_select_buckets: 0
 
 ### [retention]
 influxdb_retention_enabled: true
@@ -84,7 +84,13 @@ influxdb_http_write_tracing: false
 influxdb_http_pprof_enabled: false
 influxdb_http_https_enabled: false
 influxdb_http_https_certificate: "/etc/ssl/influxdb.pem"
+influxdb_http_https_private_key: ''
 influxdb_http_max_row_limit: 10000
+influxdb_http_realm: 'InfluxDB'
+
+### [subscriber]
+influxdb_subscriber_enabled: true
+influxdb_subscriber_http_timeout: "30s"
 
 ### [continuous_queries]
 influxdb_continuous_queries_log_enabled: true
