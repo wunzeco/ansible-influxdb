@@ -29,28 +29,25 @@ influxdb_reporting_disabled: false
 influxdb_meta_dir: "{{ influxdb_home_dir }}/meta"
 influxdb_meta_retention_autocreate: true
 influxdb_meta_logging_enabled: true
-influxdb_meta_pprof_enabled: false
-influxdb_meta_lease_duration: "1m0s"
 
 ### [data]
-influxdb_data_enabled: true
 influxdb_data_dir: "{{ influxdb_home_dir }}/data"
 influxdb_data_wal_dir: "{{ influxdb_home_dir }}/wal"
-influxdb_data_wal_logging_enabled: true
 influxdb_data_trace_logging_enabled: false
 # influxdb_data_query_log_enabled: true
-# influxdb_data_cache_max_memory_size: 524288000
+# influxdb_data_cache_max_memory_size: 1048576000
 # influxdb_data_cache_snapshot_memory_size: 26214400
 # influxdb_data_cache_snapshot_write_cold_duration: "1h"
-# influxdb_data_compact_min_file_count: 3
 # influxdb_data_compact_full_write_cold_duration: "24h"
-# influxdb_data_max_points_per_block: 1000
+# 
+# influxdb_data_max_series_per_database: 1000000
+# influxdb_data_max_values_per_tag: 100000
 
 ### [coordinator]
 influxdb_coordinator_write_timeout: "10s"
 influxdb_coordinator_max_concurrent_queries: 0
-influxdb_coordinator_query_timeout: "0"
-influxdb_coordinator_log_queries_after: "0"
+influxdb_coordinator_query_timeout: "0s"
+influxdb_coordinator_log_queries_after: "0s"
 influxdb_coordinator_max_select_point: 0
 influxdb_coordinator_max_select_series: 0
 influxdb_coordinator_max_select_buckets: 0

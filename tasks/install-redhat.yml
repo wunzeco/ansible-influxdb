@@ -10,6 +10,7 @@
 #    gpgkey: "{{ influxdb_signing_key_url }}"
 #    gpgcheck: yes
 #    enabled:  yes
+#  when: influxdb_install_from_pkg_repo
 
 - name: Add influxData yum repository
   template:
