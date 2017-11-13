@@ -4,6 +4,8 @@
 
   vars:
     #influxdb_version: 1.0.0-1
+    influxdb_http_max_row_limit: 50000
+
 
   roles:
     - ansible-influxdb
