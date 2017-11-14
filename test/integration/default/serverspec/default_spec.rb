@@ -19,3 +19,7 @@ end
 describe service('influxdb') do
   it { should be_running }
 end
+
+describe file('/etc/influxdb/influxdb.conf') do
+  it { should contain 'max-row-limit = 50000'}
+end
