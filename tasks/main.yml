@@ -1,7 +1,7 @@
 ---
 
 - name: Install influxdb
-  include: "install-{{ ansible_os_family|lower }}.yml"
+  include_tasks: "install-{{ ansible_os_family|lower }}.yml"
 
 - name: Get influxdb user info
   user: name=influxdb
