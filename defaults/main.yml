@@ -5,9 +5,9 @@ influxdb_group: "{{ influxdb_user }}"
 #############
 ## Package
 influxdb_version: '*'                # e.g. 0.13.0 or * for latest
-influxdb_signing_key_url: "https://repos.influxdata.com/influxdb.key" 
-influxdb_apt_repo: "deb https://repos.influxdata.com/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable" 
-influxdb_yum_repo_baseurl: 'https://repos.influxdata.com/centos/\$releasever/\$basearch/stable'
+influxdb_signing_key_url: "https://repos.influxdata.com/influxdb.key"
+influxdb_apt_repo: "deb https://repos.influxdata.com/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable"
+influxdb_yum_repo_baseurl: 'https://repos.influxdata.com/rhel/\$releasever/\$basearch/stable'
 
 #################
 ## Configuration
@@ -39,7 +39,7 @@ influxdb_data_trace_logging_enabled: false
 # influxdb_data_cache_snapshot_memory_size: 26214400
 # influxdb_data_cache_snapshot_write_cold_duration: "1h"
 # influxdb_data_compact_full_write_cold_duration: "24h"
-# 
+#
 # influxdb_data_max_series_per_database: 1000000
 # influxdb_data_max_values_per_tag: 100000
 
@@ -97,7 +97,7 @@ influxdb_continuous_queries_enabled: true
 ### [[graphite]]
 ### Controls one or many listeners for Graphite data.
 ###
-influxdb_graphite: 
+influxdb_graphite:
   - enabled: false
     # database: "graphite"
     # bind-address: ":2003"

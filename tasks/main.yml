@@ -16,7 +16,7 @@
     name:  "{{ influxdb_user }}"
     home:  "{{ influxdb_home_dir }}"
     move_home: yes
-  when: influxdb_home_dir != info.home 
+  when: influxdb_home_dir != info.home
   notify: Restart influxdb
 
 - name: Create influxdb config file

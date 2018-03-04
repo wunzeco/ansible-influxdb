@@ -1,0 +1,5 @@
+Authentication and Authorization (Setup)
+- name: Create metrics dataabases on influxdb
+  shell: >
+      influx -execute 'CREATE DATABASE {{ item }}'
+  with_items: "{{ influxdb_create_databases }}"
